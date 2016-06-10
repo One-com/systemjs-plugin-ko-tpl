@@ -17,8 +17,6 @@ System.config({
 });
 ```
 
-For installing with jspm, run `jspm install text`.
-
 ## Basic Use
 
 ```javascript
