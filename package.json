@@ -1,0 +1,24 @@
+{
+  "name": "systemjs-plugin-ko-tpl",
+  "version": "0.0.0",
+  "description": "SystemJS plugin for loading Knockout.js Templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/One-com/systemjs-plugin-ko-tpl.git"
+  },
+  "keywords": [
+    "systemjs",
+    "knockout",
+    "knockoutjs"
+  ],
+  "author": "Gustav Nikolaj Olsen <gno@one.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/One-com/systemjs-plugin-ko-tpl/issues"
+  },
+  "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme"
+}
