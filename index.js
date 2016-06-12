@@ -5,7 +5,7 @@ function getBaseNameFromUrl(url) {
 var injectTemplates = function(templates) {
     templates.forEach(function(tpl) {
         var s;
-        if (tpl.content.trim().slice(0, 7) === '<script') {
+        if ((/^<script/i).test(tpl.content.trim())) {
             s = document.createElement('head');
             s.innerHTML = tpl.content;
             var nestedScriptElements = s.getElementsByTagName('script');
