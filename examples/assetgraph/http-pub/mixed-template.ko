@@ -1,0 +1,4 @@
+<div id="mixed-template-root">MixedTemplateRoot</div>
+<script type="text/html" id="mixedTemplateChild">
+  <div id="mixed-template-child">MixedTemplateChild</div>
+</script>

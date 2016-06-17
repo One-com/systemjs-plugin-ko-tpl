@@ -20,5 +20,10 @@
   "bugs": {
     "url": "https://github.com/One-com/systemjs-plugin-ko-tpl/issues"
   },
-  "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme"
+  "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme",
+  "devDependencies": {
+    "assetgraph": "2.11.1",
+    "systemjs": "0.19.31",
+    "systemjs-builder": "0.15.23"
+  }
 }
