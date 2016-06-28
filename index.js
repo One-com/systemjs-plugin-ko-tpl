@@ -1,4 +1,4 @@
-var translate = window && window.TRHTML;
+var translate = typeof window !== 'undefined' && window.TRHTML;
 
 function getBaseNameFromUrl(url) {
     return url.split('/').pop().replace(/\.ko$/, '');
