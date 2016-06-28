@@ -5,7 +5,7 @@ var expect = require('unexpected')
 
 describe('assetgraph', function () {
     it('should be able to register a template', function () {
-        return new AssetGraph({root: __dirname + '/../fixtures/assetgraph/simple/'})
+        return new AssetGraph({root: __dirname + '/../fixtures/simple/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
