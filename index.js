@@ -4,7 +4,7 @@ function getBaseNameFromUrl(url) {
     return url.split('/').pop().replace(/\.ko$/, '');
 }
 
-var injectTemplates = function (templates) {
+var injectTemplates = function injectTemplates(templates) {
     templates.forEach(function (tpl) {
         var s = document.createElement('script');
         s.id = tpl.id;

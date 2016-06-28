@@ -6,7 +6,7 @@
   "scripts": {
     "ci": "npm run lint && npm test",
     "lint": "eslint .",
-    "test": "echo \"No tests.\""
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,8 @@
   "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme",
   "devDependencies": {
     "eslint": "2.13.1",
-    "eslint-config-onelint": "1.1.0"
+    "eslint-config-onelint": "1.1.0",
+    "mocha": "2.5.3",
+    "unexpected": "10.14.2"
   }
 }
