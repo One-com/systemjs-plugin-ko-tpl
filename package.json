@@ -4,6 +4,7 @@
   "description": "SystemJS plugin for loading Knockout.js Templates",
   "main": "index.js",
   "scripts": {
+    "ci": "npm test",
     "test": "echo \"No tests.\""
   },
   "repository": {
