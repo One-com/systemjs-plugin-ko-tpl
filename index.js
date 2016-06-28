@@ -1,3 +1,5 @@
+var translate = window && window.TRHTML;
+
 function getBaseNameFromUrl(url) {
     return url.split('/').pop().replace(/\.ko$/, '');
 }
@@ -19,12 +21,15 @@ module.exports = {
         .then(function(source) {
             if (builder) {
                 load.metadata.templateContent = source;
-            } else
-                injectTemplates([{
-                    id: getBaseNameFromUrl(load.address),
-                    content: source
-                }]);
-                return '';
+            } else {
+              injectTemplates([
+                  {
+                      id: getBaseNameFromUrl(load.address),
+                      content: translate ? translate(source) : source
+                  }
+              ]);
+            }
+            return '';
         });
     },
     bundle: function(loads) {
