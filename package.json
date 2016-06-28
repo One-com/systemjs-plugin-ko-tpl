@@ -23,7 +23,7 @@
     "url": "https://github.com/One-com/systemjs-plugin-ko-tpl/issues"
   },
   "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme",
-  "dependencies": {
+  "devDependencies": {
     "eslint": "2.13.1",
     "eslint-config-onelint": "1.1.0"
   }
