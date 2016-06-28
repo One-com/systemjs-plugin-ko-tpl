@@ -6,11 +6,21 @@ function getBaseNameFromUrl(url) {
 
 var injectTemplates = function(templates) {
     templates.forEach(function(tpl) {
-        var s = document.createElement('script');
-        s.id = tpl.id;
-        s.innerHTML = tpl.content;
-        s.type = 'text/html';
-        document.head.appendChild(s);
+        var s;
+        if ((/^<script/i).test(tpl.content.trim())) {
+            s = document.createElement('head');
+            s.innerHTML = tpl.content;
+            var nestedScriptElements = s.getElementsByTagName('script');
+            while (nestedScriptElements.length > 0) {
+                document.body.appendChild(nestedScriptElements[0]);
+            }
+        } else {
+            s = document.createElement('script');
+            s.id = tpl.id;
+            s.innerHTML = tpl.content;
+            s.type = 'text/html';
+            document.head.appendChild(s);
+        }
     });
 };
 
