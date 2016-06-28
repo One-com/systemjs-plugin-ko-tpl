@@ -1,8 +1,35 @@
 var translate = typeof window !== 'undefined' && window.TRHTML;
 
 function getBaseNameFromUrl(url) {
-    return url.split('/').pop().replace(/\.ko$/, '');
+    return url.split('/').pop().replace(/^(.*)\.ko\?/, '').replace(/\.ko$/, '');
 }
+
+var splitTemplate = function (load) {
+    var loads = [];
+    var source = load.metadata.templateContent;
+    var newSource = source.replace(/<script[^>]*>([^]*?)<\/script>/gm, function (tag, content) {
+        var id = tag.match(/<script [^>]*id=["']([a-zA-Z0-9-_]+)["'][^>]*>/);
+        if (id) {
+            id = id[1];
+        } else {
+            throw new Error('invalid subtemplate in ' + loads.address);
+        }
+        loads.push({
+            address: load.address + '?' + id,
+            metadata: {
+                templateContent: content
+            }
+        });
+        return '';
+    });
+
+    return [{
+        address: load.address,
+        metadata: {
+            templateContent: newSource
+        }
+    }].concat(loads);
+};
 
 var injectTemplates = function injectTemplates(templates) {
     templates.forEach(function (tpl) {
@@ -17,17 +44,18 @@ var injectTemplates = function injectTemplates(templates) {
 module.exports = {
     fetch: function (load, fetch) {
         var builder = this.builder;
-        return fetch(load)
-        .then(function (source) {
-            if (builder) {
-                load.metadata.templateContent = source;
-            } else {
-                injectTemplates([
-                    {
+        return fetch(load).then(function (source) {
+            load.metadata = load.metadata || {};
+            load.metadata.templateContent = source;
+            if (!builder) {
+                var nestedTemplates = splitTemplate(load);
+                injectTemplates(nestedTemplates.map(function (load) {
+                    var source = load.metadata.templateContent;
+                    return {
                         id: getBaseNameFromUrl(load.address),
                         content: translate ? translate(source) : source
-                    }
-                ]);
+                    };
+                }));
             }
             return '';
         });

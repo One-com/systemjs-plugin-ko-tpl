@@ -70,6 +70,27 @@ describe('systemjs-plugin-ko-tpl', function () {
                     );
                 });
             });
+            it('should insert a nested template into <head> as separate script tags', function () {
+                var fakeTemplate = [
+                    '<script type="text/html" id="nestedTemplateOne">',
+                    '    <h1>NESTED TEMPLATE ONE</h1>',
+                    '</script>',
+                    '<script type="text/html" id="nestedTemplateTwo">',
+                    '    <h1>NESTED TEMPLATE TWO</h1>',
+                    '</script>'
+                ].join('\n') + '\n';
+                var fakeContext = { builder: false };
+                var load = loadFactory('fakeTemplate.ko');
+                var fetch = function () { return Promise.resolve(fakeTemplate); };
+                var promise = plugin.fetch.call(fakeContext, load, fetch);
+                return expect(promise, 'to be fulfilled').then(function () {
+                    return expect(document.head, 'queried for', 'script', 'to satisfy', [
+                        expect.it('to have attributes', { 'id': 'fakeTemplate' }),
+                        expect.it('to have attributes', { 'id': 'nestedTemplateOne' }),
+                        expect.it('to have attributes', { 'id': 'nestedTemplateTwo' })
+                    ]);
+                });
+            });
         });
     });
     describe('bundle', function () {
