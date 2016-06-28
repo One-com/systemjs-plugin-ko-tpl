@@ -4,8 +4,8 @@ function getBaseNameFromUrl(url) {
     return url.split('/').pop().replace(/\.ko$/, '');
 }
 
-var injectTemplates = function(templates) {
-    templates.forEach(function(tpl) {
+var injectTemplates = function (templates) {
+    templates.forEach(function (tpl) {
         var s = document.createElement('script');
         s.id = tpl.id;
         s.innerHTML = tpl.content;
@@ -18,23 +18,23 @@ module.exports = {
     fetch: function (load, fetch) {
         var builder = this.builder;
         return fetch(load)
-        .then(function(source) {
+        .then(function (source) {
             if (builder) {
                 load.metadata.templateContent = source;
             } else {
-              injectTemplates([
-                  {
-                      id: getBaseNameFromUrl(load.address),
-                      content: translate ? translate(source) : source
-                  }
-              ]);
+                injectTemplates([
+                    {
+                        id: getBaseNameFromUrl(load.address),
+                        content: translate ? translate(source) : source
+                    }
+                ]);
             }
             return '';
         });
     },
-    bundle: function(loads) {
+    bundle: function (loads) {
         return {
-            source: '(' + injectTemplates.toString() + ')(' + JSON.stringify(loads.map(function(load) {
+            source: '(' + injectTemplates.toString() + ')(' + JSON.stringify(loads.map(function (load) {
                 return {
                     id: getBaseNameFromUrl(load.address),
                     content: load.metadata.templateContent

@@ -4,7 +4,8 @@
   "description": "SystemJS plugin for loading Knockout.js Templates",
   "main": "index.js",
   "scripts": {
-    "ci": "npm test",
+    "ci": "npm run lint && npm test",
+    "lint": "eslint .",
     "test": "echo \"No tests.\""
   },
   "repository": {
@@ -21,5 +22,9 @@
   "bugs": {
     "url": "https://github.com/One-com/systemjs-plugin-ko-tpl/issues"
   },
-  "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme"
+  "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme",
+  "dependencies": {
+    "eslint": "2.13.1",
+    "eslint-config-onelint": "1.1.0"
+  }
 }
