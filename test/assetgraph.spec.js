@@ -9,16 +9,8 @@ describe('assetgraph', function () {
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
             .loadAssets('index.html')
             .populate()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', 'JavaScript', 3);
-                expect(assetGraph, 'to contain relations', { type: 'HtmlScript', from: { url: /index\.html$/} }, 3);
-                expect(assetGraph.systemJsConfig, 'to satisfy', {
-                    configStatements: expect.it('to have length', 1),
-                    topLevelSystemImportCalls: expect.it('to have length', 1)
-                });
-            })
             .bundleSystemJs()
-            .assumeRequireJsConfigHasBeenFound() // And System.js
+            .assumeRequireJsConfigHasBeenFound()
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', { type: 'Html', isFragment: true }, 1);
@@ -33,6 +25,36 @@ describe('assetgraph', function () {
                 var relation = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate', node: function (node) { return node.getAttribute('id') === 'template'; }})[0];
                 expect(relation, 'to be ok');
                 expect(relation.to.text, 'to equal', '<div>TEST_TEMPLATE</div>\n');
+            });
+    });
+    it('should be able to register nested templates', function () {
+        return new AssetGraph({root: __dirname + '/../fixtures/nested/'})
+            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
+            .loadAssets('index.html')
+            .populate()
+            .bundleSystemJs()
+            .assumeRequireJsConfigHasBeenFound()
+            .populate()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', { type: 'Html', isFragment: true }, 3);
+
+            })
+            .inlineKnockoutJsTemplates()
+            .queue(function (assetGraph) {
+                expect(assetGraph, 'to contain assets', { type: 'Html', isInline: true }, 3);
+
+                var relations = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate' });
+                expect(relations, 'to satisfy', [
+                    { node: { id: 'template' } },
+                    {
+                        to: { text: expect.it('to contain', '<h1>NESTED TEMPLATE ONE</h1>') },
+                        node: { id: 'nestedTemplateOne' }
+                    },
+                    {
+                        to: { text: expect.it('to contain', '<h1>NESTED TEMPLATE TWO</h1>') },
+                        node: { id: 'nestedTemplateTwo' }
+                    }
+                ]);
             });
     });
 });

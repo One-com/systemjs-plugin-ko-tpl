@@ -1,0 +1,6 @@
+<script type="text/html" id="nestedTemplateOne">
+    <h1>NESTED TEMPLATE ONE</h1>
+</script>
+<script type="text/html" id="nestedTemplateTwo">
+    <h1>NESTED TEMPLATE TWO</h1>
+</script>
