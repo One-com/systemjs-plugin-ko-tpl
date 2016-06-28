@@ -24,9 +24,12 @@
   },
   "homepage": "https://github.com/One-com/systemjs-plugin-ko-tpl#readme",
   "devDependencies": {
+    "assetgraph": "2.12.2",
     "eslint": "2.13.1",
     "eslint-config-onelint": "1.1.0",
     "mocha": "2.5.3",
+    "systemjs": "0.19.31",
+    "systemjs-builder": "0.15.23",
     "unexpected": "10.14.2"
   }
 }
