@@ -60,7 +60,7 @@ describe('systemjs-plugin-ko-tpl', function () {
             it('should insert the template into <head>', function () {
                 var fakeTemplate = 'fakeTemplate';
                 var fakeContext = { builder: false };
-                var load = loadFactory('fakeTemplate.ko', 'fakeTemplateContent');
+                var load = loadFactory();
                 var fetch = function () { return Promise.resolve(fakeTemplate); };
                 var promise = plugin.fetch.call(fakeContext, load, fetch);
                 return expect(promise, 'to be fulfilled').then(function () {
