@@ -1,6 +1,7 @@
 /* global Promise */
 var plugin = require('../');
 var expect = require('unexpected');
+var jsdom = require('jsdom');
 
 function loadFactory(address, templateContent) {
     address = address || 'fakeTemplate.ko';
@@ -32,6 +33,41 @@ describe('systemjs-plugin-ko-tpl', function () {
                     metadata: {
                         templateContent: fakeTemplate
                     }
+                });
+            });
+        });
+        describe('jsdom', function () {
+            var expect = require('unexpected')
+                .clone()
+                .use(require('unexpected-dom'));
+
+            var origWindow = global.window;
+            var origDocument = global.document;
+
+            beforeEach(function (done) {
+                jsdom.env('<html><head></head><body></body></html>', function (err, windowObj) {
+                    if (err) { return done(err); }
+                    global.window = windowObj;
+                    global.document = windowObj.document;
+                    done();
+                });
+            });
+            afterEach(function () {
+                global.window = origWindow;
+                global.document = origDocument;
+            });
+
+            it('should insert the template into <head>', function () {
+                var fakeTemplate = 'fakeTemplate';
+                var fakeContext = { builder: false };
+                var load = loadFactory('fakeTemplate.ko', 'fakeTemplateContent');
+                var fetch = function () { return Promise.resolve(fakeTemplate); };
+                var promise = plugin.fetch.call(fakeContext, load, fetch);
+                return expect(promise, 'to be fulfilled').then(function () {
+                    return expect(document.head, 'queried for first', 'script', 'to satisfy', expect
+                        .it('to have attributes', { 'id': 'fakeTemplate' })
+                        .and('to have text', 'fakeTemplate')
+                    );
                 });
             });
         });
