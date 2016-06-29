@@ -52,21 +52,24 @@ describe('assetgraph', function () {
             .populate()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', { type: 'Html', isFragment: true }, 3);
-
             })
             .inlineKnockoutJsTemplates()
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', { type: 'Html', isInline: true }, 3);
 
                 var relations = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate' });
+                // the to value points at a non existant file name template.ko/nestedTemplateOne.ko
                 expect(relations, 'to satisfy', [
-                    { node: { id: 'template' } },
                     {
-                        to: { text: expect.it('to contain', '<h1>NESTED TEMPLATE ONE</h1>') },
+                        to: { text: '\n\n' },
+                        node: { id: 'template' }
+                    },
+                    {
+                        to: { text: '\n    <h1>NESTED TEMPLATE ONE</h1>\n' },
                         node: { id: 'nestedTemplateOne' }
                     },
                     {
-                        to: { text: expect.it('to contain', '<h1>NESTED TEMPLATE TWO</h1>') },
+                        to: { text: '\n    <h1>NESTED TEMPLATE TWO</h1>\n' },
                         node: { id: 'nestedTemplateTwo' }
                     }
                 ]);

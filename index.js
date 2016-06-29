@@ -31,6 +31,10 @@ var splitTemplate = function (load) {
     }].concat(loads);
 };
 
+var flatMap = function (list, fn) {
+    return Array.prototype.concat.apply([], list.map(fn));
+};
+
 var injectTemplates = function injectTemplates(templates) {
     templates.forEach(function (tpl) {
         var s = document.createElement('script');
@@ -61,19 +65,21 @@ module.exports = {
         });
     },
     bundle: function (loads) {
+        var templates = flatMap(loads, splitTemplate).map(function (load) {
+            return {
+                id: getBaseNameFromUrl(load.address),
+                content: load.metadata.templateContent
+            };
+        });
+        var json = JSON.stringify(templates, null, 2);
         return {
-            source: '(' + injectTemplates.toString() + ')(' + JSON.stringify(loads.map(function (load) {
-                return {
-                    id: getBaseNameFromUrl(load.address),
-                    content: load.metadata.templateContent
-                };
-            }), null, 2) + ');'
+            source: '(' + injectTemplates.toString() + ')(' + json + ');'
         };
     },
     listAssets: function (loads) {
-        return loads.map(function (load) {
+        return flatMap(loads, splitTemplate).map(function (load) {
             return {
-                url: load.address,
+                url: load.address.replace('?', '/').replace(/(\.ko|)$/, '.ko'),
                 source: load.metadata.templateContent,
                 type: 'knockout-template'
             };
