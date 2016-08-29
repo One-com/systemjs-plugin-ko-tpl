@@ -62,17 +62,17 @@ describe('systemjs-builder', function () {
                 },
                 assetList: [
                     {
-                        url: expect.it('to match', /template.ko$/),
+                        url: /template.ko$/,
                         source: '\n\n',
                         type: 'knockout-template'
                     },
                     {
-                        url: expect.it('to match', /template.ko\/nestedTemplateOne.ko$/),
+                        url: /template.ko\/nestedTemplateOne.ko$/,
                         source: '\n    <h1>NESTED TEMPLATE ONE</h1>\n',
                         type: 'knockout-template'
                     },
                     {
-                        url: expect.it('to match', /template.ko\/nestedTemplateTwo.ko$/),
+                        url: /template.ko\/nestedTemplateTwo.ko$/,
                         source: '\n    <h1>NESTED TEMPLATE TWO</h1>\n',
                         type: 'knockout-template'
                     }
