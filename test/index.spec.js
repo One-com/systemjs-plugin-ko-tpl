@@ -106,9 +106,9 @@ describe('systemjs-plugin-ko-tpl', function () {
                 var promise = plugin.fetch.call(fakeContext, load, fetch);
                 return expect(promise, 'to be fulfilled').then(function () {
                     return expect(document.head, 'queried for', 'script', 'to satisfy', [
-                        expect.it('to have attributes', { 'id': 'fakeTemplate' }),
-                        expect.it('to have attributes', { 'id': 'nestedTemplateOne' }),
-                        expect.it('to have attributes', { 'id': 'nestedTemplateTwo' })
+                        { attributes: { 'id': 'fakeTemplate' } },
+                        { attributes: { 'id': 'nestedTemplateOne' } },
+                        { attributes: { 'id': 'nestedTemplateTwo' } }
                     ]);
                 });
             });
@@ -139,7 +139,7 @@ describe('systemjs-plugin-ko-tpl', function () {
                 loadFactory('fooTemplate.ko', '<div>foo</div>')
             ]), 'to satisfy', [
                 {
-                    url: expect.it('to match', /fooTemplate.ko$/),
+                    url: /fooTemplate.ko$/,
                     source: '<div>foo</div>',
                     type: 'knockout-template'
                 }
