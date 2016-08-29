@@ -7,8 +7,8 @@ function getBaseNameFromUrl(url) {
 var splitTemplate = function (load) {
     var loads = [];
     var source = load.metadata.templateContent;
-    var newSource = source.replace(/<script[^>]*>([^]*?)<\/script>/gm, function (tag, content) {
-        var id = tag.match(/<script [^>]*id=["']([a-zA-Z0-9-_]+)["'][^>]*>/);
+    var newSource = source.replace(/<script[^>]*>([^]*?)<\/script>/gmi, function (tag, content) {
+        var id = tag.match(/<script [^>]*id=["']([a-zA-Z0-9-_]+)["'][^>]*>/i);
         if (id) {
             id = id[1];
         } else {
