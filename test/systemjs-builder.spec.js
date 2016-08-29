@@ -62,17 +62,17 @@ describe('systemjs-builder', function () {
                 },
                 assetList: [
                     {
-                        url: /template.ko$/,
+                        url: /\/fixtures\/nested\/template.ko$/,
                         source: '\n\n',
                         type: 'knockout-template'
                     },
                     {
-                        url: /template.ko\/nestedTemplateOne.ko$/,
+                        url: /\/fixtures\/nested\/nestedTemplateOne.ko$/,
                         source: '\n    <h1>NESTED TEMPLATE ONE</h1>\n',
                         type: 'knockout-template'
                     },
                     {
-                        url: /template.ko\/nestedTemplateTwo.ko$/,
+                        url: /\/fixtures\/nested\/nestedTemplateTwo.ko$/,
                         source: '\n    <h1>NESTED TEMPLATE TWO</h1>\n',
                         type: 'knockout-template'
                     }

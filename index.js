@@ -1,7 +1,7 @@
 var translate = typeof window !== 'undefined' && window.TRHTML;
 
 function getBaseNameFromUrl(url) {
-    return url.split('/').pop().replace(/^(.*)\.ko\?/, '').replace(/\.ko$/, '');
+    return url.split('/').pop().replace(/\.ko$/, '');
 }
 
 var splitTemplate = function (load) {
@@ -15,7 +15,7 @@ var splitTemplate = function (load) {
             throw new Error('invalid subtemplate in ' + loads.address);
         }
         loads.push({
-            address: load.address + '?' + id,
+            address: load.address.replace(/\/[^\/]*\.ko$/, '/' + id + '.ko'),
             metadata: {
                 templateContent: content
             }
@@ -79,7 +79,7 @@ module.exports = {
     listAssets: function (loads) {
         return flatMap(loads, splitTemplate).map(function (load) {
             return {
-                url: load.address.replace('?', '/').replace(/(\.ko|)$/, '.ko'),
+                url: load.address,
                 source: load.metadata.templateContent,
                 type: 'knockout-template'
             };

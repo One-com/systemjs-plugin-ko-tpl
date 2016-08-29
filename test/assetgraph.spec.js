@@ -57,8 +57,7 @@ describe('assetgraph', function () {
             .queue(function (assetGraph) {
                 expect(assetGraph, 'to contain assets', { type: 'Html', isInline: true }, 3);
 
-                var relations = assetGraph.findRelations({type: 'HtmlInlineScriptTemplate' });
-                // the to value points at a non existant file name template.ko/nestedTemplateOne.ko
+                var relations = assetGraph.findRelations({ type: 'HtmlInlineScriptTemplate' });
                 expect(relations, 'to satisfy', [
                     {
                         to: { text: '\n\n' },
