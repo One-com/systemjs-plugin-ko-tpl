@@ -45,6 +45,14 @@ var injectTemplates = function injectTemplates(templates) {
     });
 };
 
+var injectTemplate = function injectTemplate(tpl) {
+    var s = document.createElement('script');
+    s.id = tpl.id;
+    s.innerHTML = window.TR ? TR.HTML(tpl.content) : tpl.content;
+    s.type = 'text/html';
+    document.head.appendChild(s);
+};
+
 module.exports = {
     fetch: function (load, fetch) {
         var builder = this.builder;
@@ -64,17 +72,12 @@ module.exports = {
             return '';
         });
     },
-    bundle: function (loads) {
-        var templates = flatMap(loads, splitTemplate).map(function (load) {
-            return {
-                id: getBaseNameFromUrl(load.address),
-                content: load.metadata.templateContent
-            };
-        });
-        var json = JSON.stringify(templates, null, 2);
-        return {
-            source: '(' + injectTemplates.toString() + ')(' + json + ');'
-        };
+    translate: function (load) {
+        load.metadata.format = 'cjs';
+        return 'module.exports = (' + injectTemplate.toString() + ')(' + JSON.stringify({
+            id: getBaseNameFromUrl(load.address),
+            content: load.metadata.templateContent
+        }) + ');';
     },
     listAssets: function (loads) {
         return flatMap(loads, splitTemplate).map(function (load) {
