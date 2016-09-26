@@ -114,20 +114,14 @@ describe('systemjs-plugin-ko-tpl', function () {
             });
         });
     });
-    describe('bundle', function () {
+    describe('translate', function () {
         it('should be a function', function () {
-            return expect(plugin.bundle, 'to be a function');
+            return expect(plugin.translate, 'to be a function');
         });
         it('should return a iife that injects would inject templates', function () {
-            var result = plugin.bundle([
-                loadFactory('fooTemplate.ko', '<div>foo</div>'),
-                loadFactory('barTemplate.ko', '<div>bar</div>')
-            ]);
-            return expect(result, 'to satisfy', {
-                source: expect.it('to contain', '<div>foo</div>')
-                            .and('to contain', '<div>bar</div>')
-                            .and('to match', /^\(function injectTemplates[^]+\)\([^]+\);$/m)
-            });
+            var result = plugin.translate(loadFactory('fooTemplate.ko', '<div>foo</div>'));
+            return expect(result, 'to contain', '<div>foo</div>')
+                .and('to match', /function injectTemplate/);
         });
     });
     describe('listAssets', function () {

@@ -27,21 +27,6 @@ describe('assetgraph', function () {
                 expect(relation.to.text, 'to equal', '<div>TEST_TEMPLATE</div>\n');
             });
     });
-    it('should remove the template from the bundle', function () {
-        return new AssetGraph({root: __dirname + '/../fixtures/simple/'})
-            .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
-            .loadAssets('index.html')
-            .populate()
-            .bundleSystemJs()
-            .queue(function (assetGraph) {
-                expect(assetGraph, 'to contain assets', { type: 'Html', isFragment: true }, 1);
-                expect(assetGraph.findRelations({
-                    from: { url: /index\.html$/ },
-                    to: { fileName: /bundle/ }
-                })[0].to.text, 'not to contain', '<div>TEST_TEMPLATE</div>');
-
-            });
-    });
     it('should be able to register nested templates', function () {
         return new AssetGraph({root: __dirname + '/../fixtures/nested/'})
             .registerRequireJsConfig({ preventPopulationOfJavaScriptAssetsUntilConfigHasBeenFound: true })
