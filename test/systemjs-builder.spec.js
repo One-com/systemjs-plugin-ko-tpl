@@ -32,10 +32,6 @@ describe('systemjs-builder', function () {
         });
     });
     it('should register a nested template', function () {
-        // It will pick up a nested module as a single module, and thus it is
-        // up to assetgraph and the inlined injectTemplates method to split the
-        // templates into separate html tags. Unless the fetch hook can fan out
-        // into multiple loaded modules, I cannot see how we can fix this.
         var testCasePath = path.resolve(__dirname, '../fixtures/nested');
         var configPath = path.resolve(testCasePath, 'config.js');
         var builder = new Builder();
@@ -48,6 +44,9 @@ describe('systemjs-builder', function () {
                     'template.ko!tpl.js'
                 ],
                 tree: {
+                    // Unless the fetch hook can fan out and load more than one
+                    // module we will have this odd situation of only having one
+                    // actual module in the trace.
                     'template.ko!tpl.js': {
                         metadata: {
                             templateContent: [
@@ -63,7 +62,18 @@ describe('systemjs-builder', function () {
                 },
                 assetList: [
                     {
-                        url: expect.it('to match', /template.ko/),
+                        url: /\/fixtures\/nested\/template.ko$/,
+                        source: '\n\n',
+                        type: 'knockout-template'
+                    },
+                    {
+                        url: /\/fixtures\/nested\/nestedTemplateOne.ko$/,
+                        source: '\n    <h1>NESTED TEMPLATE ONE</h1>\n',
+                        type: 'knockout-template'
+                    },
+                    {
+                        url: /\/fixtures\/nested\/nestedTemplateTwo.ko$/,
+                        source: '\n    <h1>NESTED TEMPLATE TWO</h1>\n',
                         type: 'knockout-template'
                     }
                 ]

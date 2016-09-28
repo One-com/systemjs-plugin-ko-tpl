@@ -70,22 +70,58 @@ describe('systemjs-plugin-ko-tpl', function () {
                     );
                 });
             });
+            it('should insert a nested template into <head> as separate script tags', function () {
+                var fakeTemplate = [
+                    '<script type="text/html" id="nestedTemplateOne">',
+                    '    <h1>NESTED TEMPLATE ONE</h1>',
+                    '</script>',
+                    '<script type="text/html" id="nestedTemplateTwo">',
+                    '    <h1>NESTED TEMPLATE TWO</h1>',
+                    '</script>'
+                ].join('\n') + '\n';
+                var fakeContext = { builder: false };
+                var load = loadFactory('fakeTemplate.ko');
+                var fetch = function () { return Promise.resolve(fakeTemplate); };
+                var promise = plugin.fetch.call(fakeContext, load, fetch);
+                return expect(promise, 'to be fulfilled').then(function () {
+                    return expect(document.head, 'queried for', 'script', 'to satisfy', [
+                        { attributes: { 'id': 'fakeTemplate' } },
+                        { attributes: { 'id': 'nestedTemplateOne' } },
+                        { attributes: { 'id': 'nestedTemplateTwo' } }
+                    ]);
+                });
+            });
+            it('should insert a nested template with uppercase SCRIPT tags into <head> as separate script tags', function () {
+                var fakeTemplate = [
+                    '<SCRIPT type="text/html" id="nestedTemplateOne">',
+                    '    <h1>NESTED TEMPLATE ONE</h1>',
+                    '</SCRIPT>',
+                    '<SCRIPT type="text/html" id="nestedTemplateTwo">',
+                    '    <h1>NESTED TEMPLATE TWO</h1>',
+                    '</SCRIPT>'
+                ].join('\n') + '\n';
+                var fakeContext = { builder: false };
+                var load = loadFactory('fakeTemplate.ko');
+                var fetch = function () { return Promise.resolve(fakeTemplate); };
+                var promise = plugin.fetch.call(fakeContext, load, fetch);
+                return expect(promise, 'to be fulfilled').then(function () {
+                    return expect(document.head, 'queried for', 'script', 'to satisfy', [
+                        { attributes: { 'id': 'fakeTemplate' } },
+                        { attributes: { 'id': 'nestedTemplateOne' } },
+                        { attributes: { 'id': 'nestedTemplateTwo' } }
+                    ]);
+                });
+            });
         });
     });
-    describe('bundle', function () {
+    describe('translate', function () {
         it('should be a function', function () {
-            return expect(plugin.bundle, 'to be a function');
+            return expect(plugin.translate, 'to be a function');
         });
         it('should return a iife that injects would inject templates', function () {
-            var result = plugin.bundle([
-                loadFactory('fooTemplate.ko', '<div>foo</div>'),
-                loadFactory('barTemplate.ko', '<div>bar</div>')
-            ]);
-            return expect(result, 'to satisfy', {
-                source: expect.it('to contain', '<div>foo</div>')
-                            .and('to contain', '<div>bar</div>')
-                            .and('to match', /^\(function injectTemplates[^]+\)\([^]+\);$/m)
-            });
+            var result = plugin.translate(loadFactory('fooTemplate.ko', '<div>foo</div>'));
+            return expect(result, 'to contain', '<div>foo</div>')
+                .and('to match', /function injectTemplate/);
         });
     });
     describe('listAssets', function () {
@@ -97,7 +133,7 @@ describe('systemjs-plugin-ko-tpl', function () {
                 loadFactory('fooTemplate.ko', '<div>foo</div>')
             ]), 'to satisfy', [
                 {
-                    url: expect.it('to match', /fooTemplate.ko$/),
+                    url: /fooTemplate.ko$/,
                     source: '<div>foo</div>',
                     type: 'knockout-template'
                 }
