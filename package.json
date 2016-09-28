@@ -1,6 +1,6 @@
 {
   "name": "systemjs-plugin-ko-tpl",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "SystemJS plugin for loading Knockout.js Templates",
   "main": "index.js",
   "scripts": {
